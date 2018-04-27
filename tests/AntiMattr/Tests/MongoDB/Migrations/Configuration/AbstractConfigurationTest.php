@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AntiMattr\Tests\MongoDB\Migrations\Configuration;
 
@@ -22,7 +23,8 @@ abstract class AbstractConfigurationTest extends AntiMattrTestCase
     public function testMigrationsDirectory()
     {
         $config = $this->loadConfiguration();
-        $this->assertEquals('/path/to/migrations/classes/AntiMattrMigrations', $config->getMigrationsDirectory());
+        $path = realpath(__DIR__ . '/../Resources/fixtures');
+        $this->assertEquals($path, $config->getMigrationsDirectory());
     }
 
     public function testMigrationsNamespace()
@@ -52,6 +54,7 @@ abstract class AbstractConfigurationTest extends AntiMattrTestCase
     public function testMigrationsScriptDirectory()
     {
         $config = $this->loadConfiguration();
-        $this->assertEquals('/path/to/migrations/script_directory', $config->getMigrationsScriptDirectory());
+        $path = realpath(__DIR__ . '/../Resources/fixtures');
+        $this->assertEquals($path, $config->getMigrationsScriptDirectory());
     }
 }

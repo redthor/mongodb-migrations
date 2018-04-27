@@ -8,7 +8,7 @@
     <migrations-namespace>AntiMattrMigrationsTest</migrations-namespace>
     <database name="test_antimattr_migrations" />
     <collection name="antimattr_migration_versions_test" />
-    <migrations-directory>/path/to/migrations/classes/AntiMattrMigrations</migrations-directory>
-    <migrations-script-directory>/path/to/migrations/script_directory</migrations-script-directory>
+    <migrations-directory>.</migrations-directory>
+    <migrations-script-directory>.</migrations-script-directory>
 
 </antimattr-migrations>

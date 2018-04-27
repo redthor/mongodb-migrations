@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /*
  * This file is part of the AntiMattr MongoDB Migrations Library, a library by Matthew Fitzgerald.
@@ -16,6 +17,7 @@ use AntiMattr\MongoDB\Migrations\Exception\DuplicateVersionException;
 use AntiMattr\MongoDB\Migrations\Exception\UnknownVersionException;
 use AntiMattr\MongoDB\Migrations\OutputWriter;
 use AntiMattr\MongoDB\Migrations\Version;
+use Doctrine\MongoDB\Collection;
 use Doctrine\MongoDB\Connection;
 use Doctrine\MongoDB\Database;
 
@@ -25,24 +27,19 @@ use Doctrine\MongoDB\Database;
 class Configuration
 {
     /**
-     * @var Doctrine\MongoDB\Collection
+     * @var \Doctrine\MongoDB\Collection
      */
     private $collection;
 
     /**
-     * @var Doctrine\MongoDB\Connection
+     * @var \Doctrine\MongoDB\Connection
      */
     private $connection;
 
     /**
-     * @var Doctrine\MongoDB\Database
+     * @var \Doctrine\MongoDB\Database
      */
     private $database;
-
-    /**
-     * @var Doctrine\MongoDB\Connection
-     */
-    private $migrationsDatabase;
 
     /**
      * The migration database name to track versions in.
@@ -94,18 +91,18 @@ class Configuration
     private $name;
 
     /**
-     * @var AntiMattr\MongoDB\Migrations\Version[]
+     * @var \AntiMattr\MongoDB\Migrations\Version[]
      */
     protected $migrations = [];
 
     /**
-     * @var AntiMattr\MongoDB\Migrations\OutputWriter
+     * @var \AntiMattr\MongoDB\Migrations\OutputWriter
      */
     private $outputWriter;
 
     /**
-     * @param Doctrine\MongoDB\Connection               $connection
-     * @param AntiMattr\MongoDB\Migrations\OutputWriter $outputWriter
+     * @param \Doctrine\MongoDB\Connection               $connection
+     * @param \AntiMattr\MongoDB\Migrations\OutputWriter $outputWriter
      */
     public function __construct(Connection $connection, OutputWriter $outputWriter = null)
     {
@@ -123,7 +120,7 @@ class Configuration
      *
      * @return string The formatted version
      */
-    public static function formatVersion($version)
+    public static function formatVersion(string $version): string
     {
         return sprintf('%s-%s-%s %s:%s:%s',
             substr($version, 0, 4),
@@ -140,7 +137,7 @@ class Configuration
      *
      * @return array
      */
-    public function getAvailableVersions()
+    public function getAvailableVersions(): array
     {
         $availableVersions = [];
         foreach ($this->migrations as $migration) {
@@ -151,9 +148,9 @@ class Configuration
     }
 
     /**
-     * @return Doctrine\MongoDB\Collection
+     * @return \Doctrine\MongoDB\Collection
      */
-    public function getCollection()
+    public function getCollection(): Collection
     {
         if (isset($this->collection)) {
             return $this->collection;
@@ -165,15 +162,15 @@ class Configuration
     }
 
     /**
-     * @return Doctrine\MongoDB\Connection
+     * @return \Doctrine\MongoDB\Connection
      */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
 
     /**
-     * @return Doctrine\MongoDB\Database
+     * @return \Doctrine\MongoDB\Database
      */
     public function getDatabase(): ?Database
     {
@@ -191,7 +188,7 @@ class Configuration
      *
      * @return Version[] $migrations
      */
-    public function getMigrations()
+    public function getMigrations(): array
     {
         return $this->migrations;
     }
@@ -199,7 +196,7 @@ class Configuration
     /**
      * @param string $databaseName
      */
-    public function setMigrationsDatabaseName($databaseName)
+    public function setMigrationsDatabaseName(string $databaseName)
     {
         $this->migrationsDatabaseName = $databaseName;
     }
@@ -207,7 +204,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getMigrationsDatabaseName()
+    public function getMigrationsDatabaseName(): string
     {
         return $this->migrationsDatabaseName;
     }
@@ -215,7 +212,7 @@ class Configuration
     /**
      * @param string $collectionName
      */
-    public function setMigrationsCollectionName($collectionName)
+    public function setMigrationsCollectionName(string $collectionName)
     {
         $this->migrationsCollectionName = $collectionName;
     }
@@ -223,7 +220,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getMigrationsCollectionName()
+    public function getMigrationsCollectionName(): string
     {
         return $this->migrationsCollectionName;
     }
@@ -231,7 +228,7 @@ class Configuration
     /**
      * @param string $migrationsDirectory
      */
-    public function setMigrationsDirectory($migrationsDirectory)
+    public function setMigrationsDirectory(string $migrationsDirectory)
     {
         $this->migrationsDirectory = $migrationsDirectory;
     }
@@ -239,7 +236,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getMigrationsDirectory()
+    public function getMigrationsDirectory(): string
     {
         return $this->migrationsDirectory;
     }
@@ -249,7 +246,7 @@ class Configuration
      *
      * @param string $migrationsNamespace The migrations namespace
      */
-    public function setMigrationsNamespace($migrationsNamespace)
+    public function setMigrationsNamespace(string $migrationsNamespace)
     {
         $this->migrationsNamespace = $migrationsNamespace;
     }
@@ -257,7 +254,7 @@ class Configuration
     /**
      * @return string $migrationsNamespace
      */
-    public function getMigrationsNamespace()
+    public function getMigrationsNamespace(): string
     {
         return $this->migrationsNamespace;
     }
@@ -265,7 +262,7 @@ class Configuration
     /**
      * @param string $scriptsDirectory
      */
-    public function setMigrationsScriptDirectory($scriptsDirectory)
+    public function setMigrationsScriptDirectory(string $scriptsDirectory)
     {
         $this->migrationsScriptDirectory = $scriptsDirectory;
     }
@@ -273,7 +270,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getMigrationsScriptDirectory()
+    public function getMigrationsScriptDirectory(): string
     {
         return $this->migrationsScriptDirectory;
     }
@@ -283,7 +280,7 @@ class Configuration
      *
      * @return AntiMattr\MongoDB\Migrations\Version[]
      */
-    public function getMigratedVersions()
+    public function getMigratedVersions(): array
     {
         $this->createMigrationCollection();
 
@@ -301,12 +298,12 @@ class Configuration
      *
      * @param string $version
      *
-     * @return string
+     * @return int
      *
      * @throws AntiMattr\MongoDB\Migrations\Exception\UnknownVersionException Throws exception if migration version does not exist
      * @throws DomainException                                                If more than one version exists
      */
-    public function getMigratedTimestamp($version)
+    public function getMigratedTimestamp($version): int
     {
         $this->createMigrationCollection();
 
@@ -329,7 +326,7 @@ class Configuration
         // Convert to normalised timestamp
         $ts = new Timestamp($returnVersion['t']);
 
-        return (string) $ts;
+        return $ts->getTimestamp();
     }
 
     /**
@@ -337,7 +334,7 @@ class Configuration
      *
      * @return array
      */
-    public function getUnavailableMigratedVersions()
+    public function getUnavailableMigratedVersions(): array
     {
         return array_diff($this->getMigratedVersions(), $this->getAvailableVersions());
     }
@@ -345,7 +342,7 @@ class Configuration
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -353,7 +350,7 @@ class Configuration
     /**
      * @return string $name
      */
-    public function getName()
+    public function getName(): string
     {
         return ($this->name) ?: 'Database Migrations';
     }
@@ -361,7 +358,7 @@ class Configuration
     /**
      * @return int
      */
-    public function getNumberOfAvailableMigrations()
+    public function getNumberOfAvailableMigrations(): int
     {
         return count($this->migrations);
     }
@@ -369,7 +366,7 @@ class Configuration
     /**
      * @return int
      */
-    public function getNumberOfExecutedMigrations()
+    public function getNumberOfExecutedMigrations(): int
     {
         $this->createMigrationCollection();
 
@@ -379,9 +376,9 @@ class Configuration
     }
 
     /**
-     * @return AntiMattr\MongoDB\Migrations\OutputWriter
+     * @return \AntiMattr\MongoDB\Migrations\OutputWriter
      */
-    public function getOutputWriter()
+    public function getOutputWriter(): OutputWriter
     {
         return $this->outputWriter;
     }
@@ -444,13 +441,14 @@ class Configuration
      *
      * @return Version[] The array of migrations registered
      */
-    public function registerMigrationsFromDirectory($path)
+    public function registerMigrationsFromDirectory($path): array
     {
         $path = realpath($path);
         $path = rtrim($path, '/');
         $files = glob($path . '/Version*.php');
         $versions = [];
-        if ($files) {
+
+        if (!empty($files)) {
             foreach ($files as $file) {
                 require_once $file;
                 $info = pathinfo($file);
@@ -472,7 +470,7 @@ class Configuration
      *
      * @throws AntiMattr\MongoDB\Migrations\Exception\UnknownVersionException Throws exception if migration version does not exist
      */
-    public function getVersion($version)
+    public function getVersion($version): Version
     {
         if (!isset($this->migrations[$version])) {
             throw new UnknownVersionException($version);
@@ -488,7 +486,7 @@ class Configuration
      *
      * @return bool
      */
-    public function hasVersion($version)
+    public function hasVersion($version): bool
     {
         return isset($this->migrations[$version]);
     }
@@ -496,11 +494,11 @@ class Configuration
     /**
      * Check if a version has been migrated or not yet.
      *
-     * @param AntiMattr\MongoDB\Migrations\Version $version
+     * @param \AntiMattr\MongoDB\Migrations\Version $version
      *
      * @return bool
      */
-    public function hasVersionMigrated(Version $version)
+    public function hasVersionMigrated(Version $version): bool
     {
         $this->createMigrationCollection();
 
@@ -512,7 +510,7 @@ class Configuration
     /**
      * @return string
      */
-    public function getCurrentVersion()
+    public function getCurrentVersion(): string
     {
         $this->createMigrationCollection();
 
@@ -544,7 +542,7 @@ class Configuration
      *
      * @return string The version string in the format YYYYMMDDHHMMSS
      */
-    public function getLatestVersion()
+    public function getLatestVersion(): string
     {
         $versions = array_keys($this->migrations);
         $latest = end($versions);
@@ -557,7 +555,7 @@ class Configuration
      *
      * @return bool Whether or not the collection was created
      */
-    public function createMigrationCollection()
+    public function createMigrationCollection(): bool
     {
         $this->validate();
 
@@ -579,7 +577,7 @@ class Configuration
      *
      * @return Version[] $migrations   The array of migrations we can execute
      */
-    public function getMigrationsToExecute($direction, $to)
+    public function getMigrationsToExecute($direction, $to): array
     {
         if ('down' === $direction) {
             if (count($this->migrations)) {
@@ -614,7 +612,7 @@ class Configuration
      *
      * @return bool
      */
-    private function shouldExecuteMigration($direction, Version $version, $to, $migrated)
+    private function shouldExecuteMigration($direction, Version $version, $to, $migrated): array
     {
         if ('down' === $direction) {
             if (!in_array($version->getVersion(), $migrated)) {
@@ -657,7 +655,7 @@ class Configuration
     /**
      * @return array
      */
-    public function getDetailsMap()
+    public function getDetailsMap(): array
     {
         // Executed migration count
         $executedMigrations = $this->getMigratedVersions();

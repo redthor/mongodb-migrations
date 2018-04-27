@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace AntiMattr\Tests\MongoDB\Migrations\Configuration;
 
@@ -14,6 +15,8 @@ class ConfigurationTest extends AntiMattrTestCase
     {
         $this->connection = $this->buildMock('Doctrine\MongoDB\Connection');
         $this->configuration = new Configuration($this->connection);
+        $this->configuration->setMigrationsDatabaseName('test_antimattr_migrations');
+        $this->configuration->setMigrationsCollectionName('antimattr_migration_versions_test');
     }
 
     public function testConstructor()

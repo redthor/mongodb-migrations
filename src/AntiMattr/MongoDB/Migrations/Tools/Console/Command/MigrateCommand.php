@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /*
  * This file is part of the AntiMattr MongoDB Migrations Library, a library by Matthew Fitzgerald.
@@ -75,7 +76,7 @@ EOT
                 $output->writeln(
                     sprintf(
                         '    <comment>>></comment> %s (<comment>%s</comment>)',
-                        Configuration::formatVersion($executedUnavailableVersion),
+                        Configuration::formatVersion((string) $executedUnavailableVersion),
                         $executedUnavailableVersion
                     )
                 );
@@ -84,7 +85,7 @@ EOT
             if (!$noInteraction) {
                 $question = new ConfirmationQuestion(
                     '<question>Are you sure you wish to continue? (y/n)</question> ',
-                    'n'
+                    false
                 );
 
                 $confirmation = $this
@@ -103,7 +104,7 @@ EOT
         if (!$noInteraction) {
             $question = new ConfirmationQuestion(
                 '<question>WARNING! You are about to execute a database migration that could result in data lost. Are you sure you wish to continue? (y/n)</question> ',
-                'n'
+                false
             );
 
             $confirmation = $this

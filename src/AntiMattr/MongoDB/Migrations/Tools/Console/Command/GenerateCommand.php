@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /*
  * This file is part of the AntiMattr MongoDB Migrations Library, a library by Matthew Fitzgerald.
@@ -25,6 +26,7 @@ class GenerateCommand extends AbstractCommand
 
     private static $_template =
             '<?php
+declare(strict_types = 1);
 
 namespace <namespace>;
 

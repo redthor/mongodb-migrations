@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /*
  * This file is part of the AntiMattr MongoDB Migrations Library, a library by Matthew Fitzgerald.
@@ -125,8 +126,7 @@ EOT
                         );
 
                         $status = sprintf(
-                            '<info>%s</info>',
-                            date('Y-m-d H:i', $ts)
+                            '<info>%s</info>', date('Y-m-d H:i', $ts)
                         );
                     }
 

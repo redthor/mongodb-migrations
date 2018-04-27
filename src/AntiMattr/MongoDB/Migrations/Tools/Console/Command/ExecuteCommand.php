@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /*
  * This file is part of the AntiMattr MongoDB Migrations Library, a library by Matthew Fitzgerald.
@@ -70,7 +71,7 @@ EOT
         } else {
             $question = new ConfirmationQuestion(
                 '<question>WARNING! You are about to execute a database migration that could result in data lost. Are you sure you wish to continue? (y/n)</question> ',
-                'n'
+                false
             );
 
             $confirmation = $this
